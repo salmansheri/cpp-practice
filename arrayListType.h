@@ -1,5 +1,7 @@
 #include<iostream>
+#include<cassert>
 using namespace std; 
+
 
 template <class elemType>
 class arrayListType {
@@ -9,24 +11,24 @@ protected:
   int length; 
   int maxSize; 
 public:
-  const arrayListType<elemType>& operator = (const arrayListType<elemType>& otherList) {
-    if (this != &otherList) {
-      delete [] list; 
-      maxSize = otherList.maxSize; 
-      length = otherList.length; 
-
-      list = new elemType[maxSize]; 
-
-      asset(list != NULL); 
-
-      for (int i = 0; i< length; i++) {
-        list[i] = otherList.list[i]; 
-      }
-
-    }
-
-    return *this; 
-  } 
+  /*const arrayListType<elemType>& operator = (const arrayListType<elemType>& otherList) {*/
+  /*  if (this != &otherList) {*/
+  /*    delete [] list; */
+  /*    maxSize = otherList.maxSize; */
+  /*    length = otherList.length; */
+  /**/
+  /*    list = new elemType[maxSize]; */
+  /**/
+  /*    assert(list != NULL); */
+  /**/
+  /*    for (int i = 0; i< length; i++) {*/
+  /*      list[i] = otherList.list[i]; */
+  /*    }*/
+  /**/
+  /*  }*/
+  /**/
+  /*  return *this; */
+  /*} */
   bool isEmpty() const {
   // Function to determine whether the list is empty
   // Post condition: Return true if the list is empty; 
@@ -143,15 +145,64 @@ public:
 }
 
 
-  void seqSearch(const elemType& item) const; 
+  int seqSearch(const elemType& item) const {
   // Function to search the list for a given item. 
   // Post Condition: if the item is found, returns the location
   // in the array where the item is found; otherwise 
   // return -1
-  void insert(const elemType& insertItem); 
+   int location; 
+    int found = false; 
+    for(location=0; location< length; location++) {
+      if(list[location]== item) {
+        found = true; 
+        break; 
+      }
+
+    }
+
+    if(found) {
+      return location; 
+    }else {
+      return -1; 
+
+    }
+
+  }
+    
+
+  void insert(const elemType& insertItem) {
   // Function to insert the item specified the by the parameter
+    int location; 
+    if (length == 0) {
+      list[length++] = insertItem; 
+    } else if (length == maxSize) {
+      cerr << "Cannot insert "; 
+    } else {
+      location = seqSearch(insertItem); 
+      if(location == -1) {
+        list[length++] = insertItem; 
+          
+      } else {
+        cerr<< "the item to be inserted is already exists"; 
+      }
+    }
+
+  }
   
-  void remove(const elemType& removeItem); 
+  void remove(const elemType& removeItem) {
+    int location; 
+    if (length == 0) {
+      cerr<< "Cannot delete from an empty list"; 
+    } else {
+      location = seqSearch(removeItem); 
+       if (location == -1) {
+        removeAt(location); 
+      } else {
+        cout<< "The item to be deleted is not in the list"; 
+      }
+    }
+  }
+
   // Function to remove an item from list. the parameter
 
   arrayListType(int size) {
